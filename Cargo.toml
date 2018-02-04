@@ -1,0 +1,6 @@
+[package]
+name = "solve24"
+version = "0.1.0"
+authors = ["Dan Kaplun <dbkaplun@gmail.com>"]
+
+[dependencies]
