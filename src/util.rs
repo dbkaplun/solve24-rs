@@ -1,33 +1,78 @@
-use std::iter;
+pub fn permutations(size: usize) -> Permutations {
+    Permutations {
+        idxs: (0..size).collect(),
+        swaps: vec![0; size],
+        i: 0,
+    }
+}
 
-pub fn permutations<'a, T: Clone + 'a, I: IntoIterator<Item = &'a T> + 'a>(
-    xs: I,
-) -> Box<Iterator<Item = Vec<&'a T>> + 'a> {
-    let mut t = xs.into_iter();
-    match t.next() {
-        None => Box::new(iter::once(vec![])),
-        Some(x) => Box::new(permutations(t).flat_map(move |p| {
-            (0..p.len() + 1)
-                .map(|i| {
-                    let (l, r) = p.split_at(i);
-                    [l, &[x], r].concat()
-                })
-                .collect::<Vec<_>>()
-        })),
+pub struct Permutations {
+    idxs: Vec<usize>,
+    swaps: Vec<usize>,
+    i: usize,
+}
+
+impl Iterator for Permutations {
+    type Item = Vec<usize>;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.i > 0 {
+            loop {
+                if self.i >= self.swaps.len() {
+                    return None;
+                }
+                if self.swaps[self.i] < self.i {
+                    break;
+                }
+                self.swaps[self.i] = 0;
+                self.i += 1;
+            }
+            self.idxs.swap(self.i, (self.i & 1) * self.swaps[self.i]);
+            self.swaps[self.i] += 1;
+        }
+        self.i = 1;
+        Some(self.idxs.clone())
+    }
+}
+
+#[cfg(test)]
+mod permutations_tests {
+    use super::*;
+
+    #[test]
+    fn test_permutations_empty() {
+        let perms = permutations(0).collect::<Vec<_>>();
+        assert_eq!(perms, vec![vec![]] as Vec<Vec<usize>>)
+    }
+
+    #[test]
+    fn test_permutations_nonempty() {
+        let perms = permutations(3).collect::<Vec<_>>();
+        assert_eq!(
+            perms,
+            vec![
+                vec![0, 1, 2],
+                vec![1, 0, 2],
+                vec![2, 0, 1],
+                vec![0, 2, 1],
+                vec![1, 2, 0],
+                vec![2, 1, 0],
+            ]
+        )
     }
 }
 
 pub fn cartesian_product(sizes: &[usize]) -> CartesianProduct {
     CartesianProduct {
         sizes: sizes.to_vec(),
-        is: vec![0; sizes.len()],
+        idxs: vec![0; sizes.len()],
         done: false,
     }
 }
 
 pub struct CartesianProduct {
     sizes: Vec<usize>,
-    is: Vec<usize>,
+    idxs: Vec<usize>,
     done: bool,
 }
 
@@ -38,12 +83,12 @@ impl Iterator for CartesianProduct {
         if self.done || self.sizes.iter().product::<usize>() == 0 {
             return None;
         }
-        let res = self.is.clone();
+        let res = self.idxs.clone();
         self.done = true;
-        for (ii, i) in self.is.iter_mut().enumerate().rev() {
-            *i += 1;
-            if *i >= self.sizes[ii] {
-                *i = 0;
+        for (i, idx) in self.idxs.iter_mut().enumerate().rev() {
+            *idx += 1;
+            if *idx >= self.sizes[i] {
+                *idx = 0;
             } else {
                 self.done = false;
                 break;
@@ -54,25 +99,9 @@ impl Iterator for CartesianProduct {
 }
 
 #[cfg(test)]
-mod tests {
+mod cartesian_product_tests {
     use super::*;
 
-    #[test]
-    fn test_permutations() {
-        let xs = vec![1, 2, 3];
-        let ps = permutations(&xs).collect::<Vec<_>>();
-        assert_eq!(
-            ps,
-            vec![
-                vec![&1, &2, &3],
-                vec![&2, &1, &3],
-                vec![&2, &3, &1],
-                vec![&1, &3, &2],
-                vec![&3, &1, &2],
-                vec![&3, &2, &1],
-            ]
-        );
-    }
     #[test]
     fn test_cartesian_product_empty() {
         let prod = cartesian_product(&[1, 0]).collect::<Vec<_>>();
