@@ -3,78 +3,53 @@ use std::fmt;
 use super::{Op, Val};
 
 #[derive(Clone, PartialEq)]
-pub enum BoundOpVal {
+pub enum BoundOp {
     Val(Val),
-    BoundOp(Box<BoundOp>),
-}
-
-impl BoundOpVal {
-    fn eval(&self) -> Val {
-        match self {
-            BoundOpVal::Val(ref n) => *n,
-            BoundOpVal::BoundOp(ref o) => o.eval(),
-        }
-    }
-
-    fn to_prefix_notation(&self) -> String {
-        match self {
-            BoundOpVal::Val(ref n) => n.to_string(),
-            BoundOpVal::BoundOp(ref o) => format!("({})", o.to_prefix_notation()),
-        }
-    }
-
-    fn to_infix_notation(&self) -> String {
-        match self {
-            BoundOpVal::Val(ref n) => n.to_string(),
-            BoundOpVal::BoundOp(ref o) => format!("({})", o.to_infix_notation()),
-        }
-    }
-
-    fn to_postfix_notation(&self) -> String {
-        match self {
-            BoundOpVal::Val(ref n) => n.to_string(),
-            BoundOpVal::BoundOp(ref o) => format!("({})", o.to_postfix_notation()),
-        }
-    }
-}
-
-#[derive(Clone, PartialEq)]
-pub struct BoundOp {
-    pub left: BoundOpVal,
-    pub right: BoundOpVal,
-    pub op: Op,
+    BoundOp(Op, Box<BoundOp>, Box<BoundOp>),
 }
 
 impl BoundOp {
     pub fn eval(&self) -> Val {
-        (self.op.f)(self.left.eval(), self.right.eval())
+        match self {
+            BoundOp::Val(ref n) => *n,
+            BoundOp::BoundOp(ref o, ref l, ref r) => (o.f)(l.eval(), r.eval()),
+        }
     }
 
     pub fn to_prefix_notation(&self) -> String {
-        format!(
-            "{}{}{}",
-            self.op.name,
-            self.left.to_prefix_notation(),
-            self.right.to_prefix_notation(),
-        )
+        match self {
+            BoundOp::Val(ref n) => n.to_string(),
+            BoundOp::BoundOp(ref o, ref l, ref r) => format!(
+                "({}{}{})",
+                o.name,
+                l.to_prefix_notation(),
+                r.to_prefix_notation(),
+            ),
+        }
     }
 
     pub fn to_infix_notation(&self) -> String {
-        format!(
-            "{}{}{}",
-            self.left.to_infix_notation(),
-            self.op.name,
-            self.right.to_infix_notation(),
-        )
+        match self {
+            BoundOp::Val(ref n) => n.to_string(),
+            BoundOp::BoundOp(ref o, ref l, ref r) => format!(
+                "({}{}{})",
+                l.to_infix_notation(),
+                o.name,
+                r.to_infix_notation(),
+            ),
+        }
     }
 
     pub fn to_postfix_notation(&self) -> String {
-        format!(
-            "{}{}{}",
-            self.left.to_postfix_notation(),
-            self.right.to_postfix_notation(),
-            self.op.name,
-        )
+        match self {
+            BoundOp::Val(ref n) => n.to_string(),
+            BoundOp::BoundOp(ref o, ref l, ref r) => format!(
+                "({}{}{})",
+                l.to_postfix_notation(),
+                r.to_postfix_notation(),
+                o.name,
+            ),
+        }
     }
 }
 
@@ -86,6 +61,6 @@ impl fmt::Display for BoundOp {
 
 impl fmt::Debug for BoundOp {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "BoundOp {{{}}}", self.to_string())
+        write!(f, "BoundOp {}", self.to_string())
     }
 }

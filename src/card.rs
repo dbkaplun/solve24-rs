@@ -2,7 +2,7 @@ use std::collections::VecDeque;
 
 use super::{Ops, Val};
 use super::util::{cartesian_product, permutations};
-use super::boundop::{BoundOp, BoundOpVal};
+use super::boundop::BoundOp;
 
 pub const DEFAULT_SOLUTION: Val = 24.;
 
@@ -27,11 +27,8 @@ impl Card {
             self.op_product()
                 .flat_map(move |ops| {
                     permutations(&self.numbers).flat_map(move |numbers_perm| {
-                        let mut q: VecDeque<Vec<BoundOpVal>> = vec![
-                            numbers_perm
-                                .into_iter()
-                                .map(|&n| BoundOpVal::Val(n))
-                                .collect(),
+                        let mut q: VecDeque<Vec<BoundOp>> = vec![
+                            numbers_perm.into_iter().map(|&n| BoundOp::Val(n)).collect(),
                         ].into();
                         while let Some(vals) = q.pop_front() {
                             let vals_len = vals.len();
@@ -42,19 +39,16 @@ impl Card {
                                 let mut new_vals = vals.clone();
                                 new_vals.splice(
                                     i..i + 2,
-                                    Some(BoundOpVal::BoundOp(Box::new(BoundOp {
-                                        left: vals[i].clone(),
-                                        right: vals[i + 1].clone(),
-                                        op: ops.0[i].clone(),
-                                    }))),
+                                    Some(BoundOp::BoundOp(
+                                        ops.0[i].clone(),
+                                        Box::new(vals[i].clone()),
+                                        Box::new(vals[i + 1].clone()),
+                                    )),
                                 );
                                 new_vals
                             }));
                         }
-                        q.into_iter().filter_map(|val| match val[0].clone() {
-                            BoundOpVal::BoundOp(box o) => Some(o),
-                            _ => None,
-                        })
+                        q.into_iter().map(|val| val[0].clone())
                     })
                 })
                 .filter(move |bound_op| bound_op.eval() == self.solution),
