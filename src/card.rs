@@ -39,11 +39,11 @@ impl Card {
                                 let mut new_vals = vals.clone();
                                 new_vals.splice(
                                     i..i + 2,
-                                    Some(BoundOp::BoundOp(
-                                        ops.0[i].clone(),
-                                        Box::new(vals[i].clone()),
-                                        Box::new(vals[i + 1].clone()),
-                                    )),
+                                    Some(BoundOp::BoundOp {
+                                        op: ops.0[i].clone(),
+                                        l: Box::new(vals[i].clone()),
+                                        r: Box::new(vals[i + 1].clone()),
+                                    }),
                                 );
                                 new_vals
                             }));

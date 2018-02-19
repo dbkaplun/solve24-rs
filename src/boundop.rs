@@ -5,23 +5,35 @@ use super::{Op, Val};
 #[derive(Clone, PartialEq)]
 pub enum BoundOp {
     Val(Val),
-    BoundOp(Op, Box<BoundOp>, Box<BoundOp>),
+    BoundOp {
+        op: Op,
+        l: Box<BoundOp>,
+        r: Box<BoundOp>,
+    },
 }
 
 impl BoundOp {
     pub fn eval(&self) -> Val {
         match self {
             BoundOp::Val(ref n) => *n,
-            BoundOp::BoundOp(ref o, ref l, ref r) => (o.f)(l.eval(), r.eval()),
+            BoundOp::BoundOp {
+                ref op,
+                ref l,
+                ref r,
+            } => (op.f)(l.eval(), r.eval()),
         }
     }
 
     pub fn to_prefix_notation(&self) -> String {
         match self {
             BoundOp::Val(ref n) => n.to_string(),
-            BoundOp::BoundOp(ref o, ref l, ref r) => format!(
+            BoundOp::BoundOp {
+                ref op,
+                ref l,
+                ref r,
+            } => format!(
                 "({}{}{})",
-                o.name,
+                op.name,
                 l.to_prefix_notation(),
                 r.to_prefix_notation(),
             ),
@@ -31,10 +43,14 @@ impl BoundOp {
     pub fn to_infix_notation(&self) -> String {
         match self {
             BoundOp::Val(ref n) => n.to_string(),
-            BoundOp::BoundOp(ref o, ref l, ref r) => format!(
+            BoundOp::BoundOp {
+                ref op,
+                ref l,
+                ref r,
+            } => format!(
                 "({}{}{})",
                 l.to_infix_notation(),
-                o.name,
+                op.name,
                 r.to_infix_notation(),
             ),
         }
@@ -43,11 +59,15 @@ impl BoundOp {
     pub fn to_postfix_notation(&self) -> String {
         match self {
             BoundOp::Val(ref n) => n.to_string(),
-            BoundOp::BoundOp(ref o, ref l, ref r) => format!(
+            BoundOp::BoundOp {
+                ref op,
+                ref l,
+                ref r,
+            } => format!(
                 "({}{}{})",
                 l.to_postfix_notation(),
                 r.to_postfix_notation(),
-                o.name,
+                op.name,
             ),
         }
     }
