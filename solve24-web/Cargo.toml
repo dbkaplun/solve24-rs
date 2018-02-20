@@ -1,0 +1,8 @@
+[package]
+name = "solve24-web"
+version = "1.0.0"
+authors = ["Dan Kaplun <dbkaplun@gmail.com>"]
+
+[dependencies]
+yew = { git = "https://github.com/DenisKolodin/yew", rev = "9c8b208" } # yew = "0.3.0"
+solve24 = { path = "../solve24" }

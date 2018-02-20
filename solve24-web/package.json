@@ -1,0 +1,25 @@
+{
+  "name": "solve24-rs",
+  "version": "1.0.0",
+  "description": "Solves 24® Game cards (https://www.24game.com/)",
+  "homepage": "https://github.com/dbkaplun/solve24-rs",
+  "bugs": "https://github.com/dbkaplun/solve24-rs/issues",
+  "repository": "https://github.com/dbkaplun/solve24-rs.git",
+  "main": "index.html",
+  "scripts": {
+    "test": "cargo web test --nodejs",
+    "start": "npm run parcel:start",
+
+    "parcel": "export OUT_DIR='../p' PUBLIC_URL='/solve24-rs/p' && rm -rf $OUT_DIR && parcel $COMMAND index.html --out-file=index.html --out-dir=$OUT_DIR --public-url=$PUBLIC_URL",
+    "parcel:start": "COMMAND=serve npm run parcel",
+    "parcel:watch": "COMMAND=watch npm run parcel",
+    "parcel:build": "COMMAND=build npm run parcel"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "parcel-bundler": "1.6.1",
+    "parcel-plugin-cargo-web": "0.1.0"
+  },
+  "author": "Dan Kaplun <dbkaplun@gmail.com>",
+  "license": "MIT"
+}

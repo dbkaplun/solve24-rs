@@ -5,4 +5,5 @@ rust:
   - nightly
 env:
   - PROJECT=solve24
+  - PROJECT=solve24-web
 script: cd $PROJECT && cargo test
