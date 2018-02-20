@@ -1,8 +1,9 @@
 use std::collections::VecDeque;
 
 use super::{Ops, Val};
-use super::util::{cartesian_product, permutations};
 use super::boundop::BoundOp;
+use super::util::{cartesian_product, permutations};
+use super::val::eq;
 
 pub const DEFAULT_SOLUTION: Val = 24.;
 
@@ -28,7 +29,7 @@ impl Card {
                 .flat_map(move |ops| {
                     self.numbers_permutations().flat_map(move |numbers_perm| {
                         let mut q: VecDeque<Vec<BoundOp>> = vec![
-                            numbers_perm.into_iter().map(|n| BoundOp::Val(n)).collect(),
+                            numbers_perm.into_iter().map(BoundOp::Val).collect(),
                         ].into();
                         while let Some(vals) = q.pop_front() {
                             let vals_len = vals.len();
@@ -51,7 +52,7 @@ impl Card {
                         q.into_iter().map(|val| val[0].clone())
                     })
                 })
-                .filter(move |bound_op| bound_op.eval() == self.solution),
+                .filter(move |bound_op| eq(bound_op.eval(), self.solution)),
         )
     }
 

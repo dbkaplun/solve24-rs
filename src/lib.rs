@@ -10,13 +10,16 @@ assert_eq!(solutions.next(), None);
 ```
 */
 
-pub mod card;
-pub use self::card::{Card, DEFAULT_SOLUTION};
+mod val;
+pub use val::{Val};
 
-pub mod op;
-pub use self::op::{Op, OpFn, Ops};
+mod card;
+pub use card::{Card, DEFAULT_SOLUTION};
+
+mod op;
+pub use op::{Op, OpFn, Ops};
 
 mod boundop;
-mod util;
+pub use boundop::BoundOp;
 
-pub type Val = f64;
+mod util;

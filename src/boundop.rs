@@ -15,23 +15,15 @@ pub enum BoundOp {
 impl BoundOp {
     pub fn eval(&self) -> Val {
         match self {
-            BoundOp::Val(ref n) => *n,
-            BoundOp::BoundOp {
-                ref op,
-                ref l,
-                ref r,
-            } => (op.f)(l.eval(), r.eval()),
+            BoundOp::Val(n) => *n,
+            BoundOp::BoundOp { op, l, r } => (op.f)(l.eval(), r.eval()),
         }
     }
 
     pub fn to_prefix_notation(&self) -> String {
         match self {
-            BoundOp::Val(ref n) => n.to_string(),
-            BoundOp::BoundOp {
-                ref op,
-                ref l,
-                ref r,
-            } => format!(
+            BoundOp::Val(n) => n.to_string(),
+            BoundOp::BoundOp { op, l, r } => format!(
                 "({}{}{})",
                 op.name,
                 l.to_prefix_notation(),
@@ -42,12 +34,8 @@ impl BoundOp {
 
     pub fn to_infix_notation(&self) -> String {
         match self {
-            BoundOp::Val(ref n) => n.to_string(),
-            BoundOp::BoundOp {
-                ref op,
-                ref l,
-                ref r,
-            } => format!(
+            BoundOp::Val(n) => n.to_string(),
+            BoundOp::BoundOp { op, l, r } => format!(
                 "({}{}{})",
                 l.to_infix_notation(),
                 op.name,
@@ -58,12 +46,8 @@ impl BoundOp {
 
     pub fn to_postfix_notation(&self) -> String {
         match self {
-            BoundOp::Val(ref n) => n.to_string(),
-            BoundOp::BoundOp {
-                ref op,
-                ref l,
-                ref r,
-            } => format!(
+            BoundOp::Val(n) => n.to_string(),
+            BoundOp::BoundOp { op, l, r } => format!(
                 "({}{}{})",
                 l.to_postfix_notation(),
                 r.to_postfix_notation(),
