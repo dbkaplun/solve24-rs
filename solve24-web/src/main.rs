@@ -92,7 +92,10 @@ pub fn parse_val(input: &str) -> Val {
 impl Renderable<Context, Model> for Model {
     fn view(&self) -> Html<Context, Self> {
         let card = self.get_card();
-        let solution_views = card.solve().enumerate().map(solution_view).collect::<Vec<_>>();
+        let solution_views = card.solve()
+            .enumerate()
+            .map(solution_view)
+            .collect::<Vec<_>>();
         let solution_views_len = solution_views.len();
         html! {
             <div>

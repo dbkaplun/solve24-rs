@@ -11,7 +11,7 @@ assert_eq!(solutions.next(), None);
 */
 
 mod val;
-pub use val::{Val};
+pub use val::Val;
 
 mod card;
 pub use card::{Card, DEFAULT_SOLUTION};

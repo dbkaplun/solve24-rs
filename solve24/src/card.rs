@@ -28,9 +28,8 @@ impl Card {
             self.op_product()
                 .flat_map(move |ops| {
                     self.numbers_permutations().flat_map(move |numbers_perm| {
-                        let mut q: VecDeque<Vec<BoundOp>> = vec![
-                            numbers_perm.into_iter().map(BoundOp::Val).collect(),
-                        ].into();
+                        let mut q: VecDeque<Vec<BoundOp>> =
+                            vec![numbers_perm.into_iter().map(BoundOp::Val).collect()].into();
                         while let Some(vals) = q.pop_front() {
                             let vals_len = vals.len();
                             if vals_len <= 1 {
