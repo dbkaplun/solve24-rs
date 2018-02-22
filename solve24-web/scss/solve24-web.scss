@@ -3,7 +3,7 @@
 .solve24-card {
   background: url("../static/card.jpg");
   width: 343px; height: 344px;
-  display: inline-block;
+  margin-left: auto; margin-right: auto;
   position: relative;
 
   [name] { position: absolute; text-align: center; font-size: 36px; }

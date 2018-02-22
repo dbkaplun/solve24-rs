@@ -1,4 +1,5 @@
 #![feature(match_default_bindings)]
+#![recursion_limit="128"]
 
 extern crate solve24;
 extern crate stdweb;
@@ -101,8 +102,8 @@ impl Renderable<Context, Model> for Model {
             .collect::<Vec<_>>();
         let solution_views_len = solution_views.len();
         html! {
-            <>
-                <div class="text-center",>
+            <div class="row",>
+                <div class="col-lg-5",>
                     <div class="solve24-card",>
                         <input
                             name="top",
@@ -130,22 +131,24 @@ impl Renderable<Context, Model> for Model {
                         />
                     </div>
                 </div>
-                {
-                    match solution_views_len {
-                        0 => html! { <p>{"No solutions."}</p> },
-                        _ => html! {
-                            <table class="table",>
-                                <thead>
-                                    <th scope="col",>{"#"}</th>
-                                    <th scope="col",>{"Solution"}</th>
-                                    <th scope="col",>{"Explanation"}</th>
-                                </thead>
-                                { for solution_views }
-                            </table>
-                        },
+                <div class="col-lg-7",>
+                    {
+                        match solution_views_len {
+                            0 => html! { <p>{"No solutions."}</p> },
+                            _ => html! {
+                                <table class="table",>
+                                    <thead>
+                                        <th scope="col",>{"#"}</th>
+                                        <th scope="col",>{"Solution"}</th>
+                                        <th scope="col",>{"Explanation"}</th>
+                                    </thead>
+                                    { for solution_views }
+                                </table>
+                            },
+                        }
                     }
-                }
-            </>
+                </div>
+            </div>
         }
     }
 }
