@@ -134,7 +134,7 @@ impl Renderable<Context, Model> for Model {
                 <div class="col-lg-7",>
                     {
                         match solution_views_len {
-                            0 => html! { <p>{"No solutions."}</p> },
+                            0 => html! { <h3 class="my-3",>{"No solutions."}</h3> },
                             _ => html! {
                                 <table class="table",>
                                     <thead>
