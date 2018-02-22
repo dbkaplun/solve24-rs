@@ -99,21 +99,43 @@ impl Renderable<Context, Model> for Model {
         let solution_views_len = solution_views.len();
         html! {
             <div>
-                <div class="card",>
-                    <input name="top", value=self.val_top, oninput=|e: InputData| Msg::SetTop(e.value), />
-                    <input name="right", value=self.val_right, oninput=|e: InputData| Msg::SetRight(e.value), />
-                    <input name="bottom", value=self.val_bottom, oninput=|e: InputData| Msg::SetBottom(e.value), />
-                    <input name="left", value=self.val_left, oninput=|e: InputData| Msg::SetLeft(e.value), />
+                <div class="text-center",>
+                    <div class="card",>
+                        <input
+                            name="top",
+                            value=self.val_top,
+                            class="form-control",
+                            oninput=|e: InputData| Msg::SetTop(e.value),
+                        />
+                        <input
+                            name="right",
+                            value=self.val_right,
+                            class="form-control",
+                            oninput=|e: InputData| Msg::SetRight(e.value),
+                        />
+                        <input
+                            name="bottom",
+                            value=self.val_bottom,
+                            class="form-control",
+                            oninput=|e: InputData| Msg::SetBottom(e.value),
+                        />
+                        <input
+                            name="left",
+                            value=self.val_left,
+                            class="form-control",
+                            oninput=|e: InputData| Msg::SetLeft(e.value),
+                        />
+                    </div>
                 </div>
                 {
                     match solution_views_len {
                         0 => html! { <p>{"No solutions."}</p> },
                         _ => html! {
-                            <table>
+                            <table class="table",>
                                 <thead>
-                                    <th>{"#"}</th>
-                                    <th>{"Solution"}</th>
-                                    <th>{"Explanation"}</th>
+                                    <th scope="col",>{"#"}</th>
+                                    <th scope="col",>{"Solution"}</th>
+                                    <th scope="col",>{"Explanation"}</th>
                                 </thead>
                                 { for solution_views }
                             </table>
@@ -131,18 +153,18 @@ fn solution_view((idx, bop): (usize, BoundOp)) -> Html<Context, Model> {
             <td>{idx + 1}</td>
             <td>
                 {bop.to_infix_notation()}
-                <span class="text-muted",>
+                <small class="text-muted",>
                     {format!(" = {}", bop.eval())}
-                </span>
+                </small>
             </td>
             <td>
-                <ul>
+                <ol>
                     { for explain(&bop).1.into_iter().map(|s| {
                         html! {
                             <li>{s}</li>
                         }
                     }) }
-                </ul>
+                </ol>
             </td>
         </tr>
     }

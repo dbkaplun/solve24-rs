@@ -1,0 +1,17 @@
+@import "../node_modules/bootstrap/scss/bootstrap.scss";
+
+.card {
+  background: url("../static/card.jpg");
+  width: 343px;
+  height: 344px;
+  display: inline-block;
+  position: relative;
+
+  [name] { position: absolute; text-align: center; font-size: 36px; }
+  [name="top"], [name="bottom"] { left: 139px; width: 65px; height: 72px; }
+  [name="left"], [name="right"] { top: 141px; width: 73px; height: 55px; }
+  [name="top"] { top: 40px; }
+  [name="bottom"] { top: 224px; }
+  [name="right"] { left: 226px; }
+  [name="left"] { left: 43px; }
+}

@@ -9,7 +9,6 @@
   "scripts": {
     "test": "cargo web test --nodejs",
     "start": "npm run parcel:start",
-
     "parcel": "export OUT_DIR='../p' PUBLIC_URL='/solve24-rs/p' && rm -rf $OUT_DIR && parcel $COMMAND index.html --out-file=index.html --out-dir=$OUT_DIR --public-url=$PUBLIC_URL",
     "parcel:start": "COMMAND=serve npm run parcel",
     "parcel:watch": "COMMAND=watch npm run parcel",
@@ -17,6 +16,8 @@
   },
   "dependencies": {},
   "devDependencies": {
+    "bootstrap": "4.0.0",
+    "node-sass": "4.7.2",
     "parcel-bundler": "1.6.1",
     "parcel-plugin-cargo-web": "0.1.0"
   },
