@@ -4,5 +4,6 @@ version = "1.0.0"
 authors = ["Dan Kaplun <dbkaplun@gmail.com>"]
 
 [dependencies]
+stdweb = "0.3"
 yew = { git = "https://github.com/DenisKolodin/yew", rev = "9c8b208" } # yew = "0.3.0"
 solve24 = { path = "../solve24" }

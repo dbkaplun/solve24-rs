@@ -1,9 +1,27 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>solve24-rs &bull; Solves 24® Game cards (https://www.24game.com/)</title>
+        <title>solve24-rs &bull; 24 Game solver in Rust</title>
+        <link rel="stylesheet" href="scss/solve24-web.scss" />
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
     </head>
-    <body>
-        <script src="main.js"></script>
+    <body class="has-webassembly">
+        <div class="container">
+            <h1>solve24-rs</h1>
+            <p>
+                <a href="https://en.wikipedia.org/wiki/24_Game" target="_blank">24 Game</a> solver in Rust
+                &bull;
+                code, ★ on <a href="https://github.com/dbkaplun/solve24-rs" target="_blank">Github</a>
+            </p>
+            <hr />
+            <div id="app"></div>
+            <div class="hide-webassembly">
+                <h2>WebAssembly support required</h2>
+                <p>Your browser does not support WebAssembly. WebAssembly support is required to view all the content on this page.</p>
+                <p><a href="https://www.google.com/chrome/" target="_blank">Download Google Chrome here</a>.</p>
+            </div>
+        </div>
+        <script src="js/index.js"></script>
     </body>
 </html>
