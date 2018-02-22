@@ -6,7 +6,7 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
     </head>
-    <body class="has-webassembly">
+    <body class="loading">
         <div class="container">
             <h1>solve24-rs</h1>
             <p>
@@ -16,9 +16,10 @@
             </p>
             <hr />
             <div id="app"></div>
-            <div class="hide-webassembly">
+            <h2 class="show-loading text-muted text-center">Loading...</h2>
+            <div class="hide-loading hide-webassembly">
                 <h2>WebAssembly support required</h2>
-                <p>Your browser does not support WebAssembly. WebAssembly support is required to view all the content on this page.</p>
+                <p>Your browser does not support WebAssembly, which is required to view all the content on this page.</p>
                 <p><a href="https://www.google.com/chrome/" target="_blank">Download Google Chrome here</a>.</p>
             </div>
         </div>

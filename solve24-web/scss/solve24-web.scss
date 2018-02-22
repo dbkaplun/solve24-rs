@@ -2,8 +2,7 @@
 
 .solve24-card {
   background: url("../static/card.jpg");
-  width: 343px;
-  height: 344px;
+  width: 343px; height: 344px;
   display: inline-block;
   position: relative;
 
@@ -16,6 +15,9 @@
   [name="left"] { left: 43px; }
 }
 
-.has-webassembly .hide-webassembly {
-  display: none;
-}
+$flags: body;
+
+#{$flags}.has-webassembly .hide-webassembly { display: none; }
+
+#{$flags}.loading .hide-loading { display: none; }
+#{$flags}:not(.loading) .show-loading { display: none; }

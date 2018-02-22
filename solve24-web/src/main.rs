@@ -5,8 +5,9 @@ extern crate stdweb;
 #[macro_use]
 extern crate yew;
 
+use std::error::Error;
 use solve24::{BoundOp, Card, Val};
-use stdweb::web::{document, INode};
+use stdweb::web::{document, IElement, INode};
 use yew::prelude::*;
 use yew::services::console::ConsoleService;
 
@@ -194,9 +195,29 @@ fn explain(bop: &BoundOp) -> (Val, Vec<String>) {
     }
 }
 
-fn main() {
+fn start() -> Result<(), Box<Error>> {
     yew::initialize();
+
     let app: App<_, Model> = App::new(Context::default());
-    app.mount(document().query_selector("#app").unwrap());
+    app.mount(try!(
+        document()
+            .query_selector("#app")
+            .ok_or("couldn't find #app")
+    ));
+
+    let body = try!(
+        document()
+            .query_selector("body")
+            .ok_or("couldn't find body")
+    );
+    body.class_list().add("has-webassembly");
+
     yew::run_loop();
+    Ok(())
+}
+
+fn main() {
+    if let Err(err) = start() {
+        warn!("{}", err);
+    }
 }
