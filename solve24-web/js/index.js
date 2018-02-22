@@ -1,2 +1,4 @@
-import("../Cargo.toml").catch(console.error);
-document.querySelector('body').classList.remove('loading');
+import("../Cargo.toml")
+    .catch(console.error)
+    .then(() => { document.querySelector('body').classList.remove('loading'); })
+    .catch(console.error);
