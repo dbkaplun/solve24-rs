@@ -8,7 +8,7 @@ extern crate yew;
 
 use std::error::Error;
 use solve24::{BoundOp, Card, Val};
-use stdweb::web::{document, IElement, INode};
+use stdweb::web::{document, IElement};
 use yew::prelude::*;
 use yew::services::console::ConsoleService;
 
