@@ -1,5 +1,5 @@
 #![feature(match_default_bindings)]
-#![recursion_limit="128"]
+#![recursion_limit = "128"]
 
 extern crate solve24;
 extern crate stdweb;

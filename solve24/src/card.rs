@@ -1,7 +1,6 @@
 use std::collections::VecDeque;
 
-use super::{Ops, Val};
-use super::boundop::BoundOp;
+use super::{BoundOp, Ops, Val};
 use super::util::{cartesian_product, permutations};
 use super::val::eq;
 
@@ -42,9 +41,10 @@ impl Card {
                                 new_bops.splice(
                                     i..i + 2,
                                     Some(BoundOp::BoundOp {
-                                        op: ops.0[new_bops_len - 1].clone(), // going backwards here, but no big deal
                                         l: Box::new(bops[i].clone()),
                                         r: Box::new(bops[i + 1].clone()),
+                                        // going backwards here, but no big deal
+                                        op: ops.0[new_bops_len - 1].clone(),
                                     }),
                                 );
 
@@ -59,9 +59,13 @@ impl Card {
     }
 
     fn op_product<'a>(&'a self) -> Box<Iterator<Item = Ops> + 'a> {
+        let numbers_len = self.numbers.len();
+        if numbers_len < 1 {
+            return Box::new(None.into_iter());
+        }
         let ops = &self.ops.0;
         Box::new(
-            cartesian_product(&vec![ops.len(); self.numbers.len() - 1][..])
+            cartesian_product(&vec![ops.len(); numbers_len - 1][..])
                 .map(move |idxs| Ops(idxs.into_iter().map(|i| ops[i].clone()).collect::<Vec<_>>())),
         )
     }
@@ -80,11 +84,14 @@ mod card_tests {
     use super::*;
 
     #[test]
+    fn test_solve_empty() {
+        let card = Card::new(vec![]);
+        assert_eq!(card.solve().collect::<Vec<_>>(), vec![]);
+    }
+
+    #[test]
     fn test_solve_works() {
-        let tests = vec![
-            vec![1., 2., 3., 4.],
-            vec![1., 1., 4., 6.],
-        ];
+        let tests = vec![vec![1., 2., 3., 4.], vec![1., 1., 4., 6.]];
         for numbers in tests {
             let card = Card::new(numbers);
             let mut count = 0;
@@ -104,9 +111,7 @@ mod card_tests {
         ];
         for (numbers, expected) in tests {
             let card = Card::new(numbers);
-            let actual = card.solve()
-                .map(|bop| bop.to_string())
-                .collect::<Vec<_>>();
+            let actual = card.solve().map(|bop| bop.to_string()).collect::<Vec<_>>();
             assert_eq!(actual, expected);
         }
     }
