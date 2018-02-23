@@ -55,6 +55,28 @@ impl BoundOp {
             ),
         }
     }
+
+    pub fn explain(&self) -> (Val, Vec<String>) {
+        let mut explanation = vec![];
+        match self {
+            BoundOp::Val(val) => (*val, explanation),
+            BoundOp::BoundOp { op, l, r } => {
+                let (lv, le) = l.explain();
+                explanation.extend(le);
+                let (rv, re) = r.explain();
+                explanation.extend(re);
+
+                let flat_bop = BoundOp::BoundOp {
+                    op: op.clone(),
+                    l: Box::new(BoundOp::Val(lv)),
+                    r: Box::new(BoundOp::Val(rv)),
+                };
+                let val = flat_bop.eval();
+                explanation.push(format!("{} = {}", flat_bop.to_string(), val));
+                (val, explanation)
+            }
+        }
+    }
 }
 
 impl fmt::Display for BoundOp {

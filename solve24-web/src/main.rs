@@ -165,7 +165,7 @@ fn solution_view((idx, bop): (usize, BoundOp)) -> Html<Context, Model> {
             </td>
             <td>
                 <ol>
-                    { for explain(&bop).1.into_iter().map(|s| {
+                    { for bop.explain().1.into_iter().map(|s| {
                         html! {
                             <li>{s}</li>
                         }
@@ -173,28 +173,6 @@ fn solution_view((idx, bop): (usize, BoundOp)) -> Html<Context, Model> {
                 </ol>
             </td>
         </tr>
-    }
-}
-
-fn explain(bop: &BoundOp) -> (Val, Vec<String>) {
-    let mut explanation = vec![];
-    match bop {
-        BoundOp::Val(val) => (*val, explanation),
-        BoundOp::BoundOp { op, l, r } => {
-            let (lv, le) = explain(l);
-            explanation.extend(le);
-            let (rv, re) = explain(r);
-            explanation.extend(re);
-
-            let flat_bop = BoundOp::BoundOp {
-                op: op.clone(),
-                l: Box::new(BoundOp::Val(lv)),
-                r: Box::new(BoundOp::Val(rv)),
-            };
-            let val = flat_bop.eval();
-            explanation.push(format!("{} = {}", flat_bop.to_string(), val));
-            (val, explanation)
-        }
     }
 }
 
