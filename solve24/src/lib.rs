@@ -23,3 +23,7 @@ mod boundop;
 pub use boundop::BoundOp;
 
 mod util;
+
+pub fn solve24(numbers: Vec<Val>) -> Box<Iterator<Item = BoundOp>> {
+    Card::new(numbers).solve()
+}

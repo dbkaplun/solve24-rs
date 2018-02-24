@@ -7,7 +7,7 @@ extern crate stdweb;
 extern crate yew;
 
 use std::error::Error;
-use solve24::{BoundOp, Card, Val};
+use solve24::{solve24, BoundOp, Val};
 use stdweb::web::{document, IElement};
 use yew::prelude::*;
 use yew::services::console::ConsoleService;
@@ -33,8 +33,8 @@ pub struct Model {
 }
 
 impl Model {
-    fn get_card(&self) -> Card {
-        Card::new(vec![
+    fn solve<'a>(&'a self) -> Box<Iterator<Item = BoundOp> + 'a> {
+        solve24(vec![
             self.val_top,
             self.val_right,
             self.val_bottom,
@@ -95,8 +95,7 @@ pub fn parse_val(input: &str) -> Val {
 
 impl Renderable<Context, Model> for Model {
     fn view(&self) -> Html<Context, Self> {
-        let card = self.get_card();
-        let solution_views = card.solve()
+        let solution_views = self.solve()
             .enumerate()
             .map(solution_view)
             .collect::<Vec<_>>();
@@ -159,9 +158,9 @@ fn solution_view((idx, bop): (usize, BoundOp)) -> Html<Context, Model> {
             <td>{idx + 1}</td>
             <td>
                 {bop.to_infix_notation()}
-                <small class="text-muted",>
+                <span class="text-muted",>
                     {format!(" = {}", bop.eval())}
-                </small>
+                </span>
             </td>
             <td>
                 <ol>
